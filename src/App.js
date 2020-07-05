@@ -5,17 +5,33 @@ import posts from './posts'
 // Modifica el componente App para implmentar la funcionalidad requerida
 
 class App extends Component {
+  constructor(){
+    super();
+    this.state = {
+      query: "",
+    }
+  }
+
+  handleQuery = (event) => {
+    this.setState({
+      query: event.target.value,
+    })
+  }
+
   render() {
+    let modPosts=posts.filter(post => (post.title.toLowerCase().includes(this.state.query.toLowerCase())));
     return (
       <div>
         <div className="filter">
-          <input type="text" placeholder="Ingresa el término de búsqueda" />
+          <input value={this.state.query} onChange={this.handleQuery} type="text" placeholder="Ingresa el término de búsqueda" />
         </div>
         <ul>
-          <li>
-            <a href={posts[0].url}><img src={posts[0].image } /></a>
-            <p>{ posts[0].title }</p>
-          </li>
+          {modPosts.map((post,idx)=>
+            <li key={idx}>
+              <a href={post.url}><img src={post.image } /></a>
+              <p>{ post.title }</p>
+            </li>          
+          )}
         </ul>
       </div>
     )
